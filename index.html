@@ -23,20 +23,6 @@
             <i class="fas fa-question"></i>
         </button>
         
-        <div class="slide-selector-container">
-            <button id="slide-selector-btn" class="control-btn slide-selector-btn" aria-label="Select slide">
-                <i class="fas fa-list"></i>
-            </button>
-            <div class="slide-selector-dropdown">
-                <div class="slide-selector-search">
-                    <input type="text" id="slide-search" placeholder="Search slides...">
-                </div>
-                <div class="slide-selector-list" id="slide-selector-list">
-                    <!-- Will be populated by JavaScript -->
-                </div>
-            </div>
-        </div>
-        
         <div class="tooltip">
             <h4>Keyboard Shortcuts</h4>
             <ul>
@@ -46,7 +32,7 @@
                 <li><strong>F:</strong> Toggle fullscreen</li>
                 <li><strong>P:</strong> Toggle presentation mode</li>
                 <li><strong>Esc:</strong> Exit fullscreen/presentation mode</li>
-                <li><strong>L:</strong> Open slide selector</li>
+                <li><strong>M:</strong> Open slides navigation</li>
             </ul>
         </div>
         
@@ -91,6 +77,27 @@
         
         <div class="loader"></div>
     </div>
+
+    <!-- Slide drawer navigation -->
+    <div class="slide-drawer-overlay" id="drawer-overlay"></div>
+    <div class="slide-drawer-container" id="slide-drawer">
+        <div class="drawer-header">
+            <h3 class="drawer-title">Presentation Slides</h3>
+            <button class="drawer-close" id="drawer-close" title="Close navigation drawer">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="drawer-search">
+            <input type="text" id="drawer-search" placeholder="Search slides...">
+        </div>
+        <div class="drawer-content" id="drawer-content">
+            <!-- Slides will be populated here dynamically -->
+        </div>
+    </div>
+
+    <button class="drawer-toggle-btn" id="drawer-toggle" title="Open slides navigation">
+        <i class="fas fa-bars"></i>
+    </button>
 
     <script src="script.js"></script>
 </body>

@@ -14,10 +14,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const fullscreenBtn = document.getElementById('fullscreen-btn');
     const loader = document.querySelector('.loader');
     const imageContainer = document.querySelector('.image-container');
-    const slideSelectorBtn = document.getElementById('slide-selector-btn');
-    const slideSelectorDropdown = document.querySelector('.slide-selector-dropdown');
-    const slideSelectorList = document.getElementById('slide-selector-list');
-    const slideSearch = document.getElementById('slide-search');
+    
+    // Drawer navigation elements
+    const drawerToggle = document.getElementById('drawer-toggle');
+    const drawerClose = document.getElementById('drawer-close');
+    const slideDrawer = document.getElementById('slide-drawer');
+    const drawerOverlay = document.getElementById('drawer-overlay');
+    const drawerContent = document.getElementById('drawer-content');
+    const drawerSearch = document.getElementById('drawer-search');
 
     // Slide data with image paths and descriptions
     const slides = [
@@ -38,6 +42,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 { name: 'Zyad Hossam' }
             ],
             description: ''
+        },
+        {
+            type: 'definition',
+            title: 'GIS Buffering',
+            description: 'A spatial analysis technique that creates a zone of a specified distance around features',
+            benefits: [
+                'Identifies areas of potential impact or influence',
+                'Enables proximity analysis for decision making',
+                'Supports emergency response planning',
+                'Visualizes service coverage areas',
+                'Facilitates environmental impact assessment',
+                'Allows for multi-layer spatial queries'
+            ]
         },
         {
             image: 'New folder/Screenshot (443).png',
@@ -228,11 +245,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let isFullscreen = false;
     let isPresentationMode = false;
     let idleTimer;
-    let isSlideSelectorOpen = false;
+    let isDrawerOpen = false;
 
-    // Populate slide selector
-    function populateSlideSelector(filter = '') {
-        slideSelectorList.innerHTML = '';
+    // Populate drawer content
+    function populateDrawerContent(filter = '') {
+        drawerContent.innerHTML = '';
         
         slides.forEach((slide, index) => {
             // Get slide title or default based on type
@@ -245,6 +262,9 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (slide.type === 'team') {
                 slideTitle = slide.teamName;
                 slideType = 'team';
+            } else if (slide.type === 'definition') {
+                slideTitle = slide.title;
+                slideType = 'definition';
             } else if (slide.type === 'thanks') {
                 slideTitle = slide.title;
                 slideType = 'thanks';
@@ -259,42 +279,49 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Create slide item element
-            const slideItem = document.createElement('div');
-            slideItem.classList.add('slide-item');
+            // Create drawer item element
+            const drawerItem = document.createElement('div');
+            drawerItem.classList.add('drawer-item');
             if (index === currentSlide) {
-                slideItem.classList.add('active');
+                drawerItem.classList.add('active');
             }
             
             let typeHTML = '';
             if (slideType) {
-                typeHTML = `<span class="slide-item-type ${slideType}">${slideType}</span>`;
+                typeHTML = `<span class="drawer-item-type ${slideType}">${slideType}</span>`;
             }
             
-            slideItem.innerHTML = `
-                <div class="slide-item-number">${index + 1}</div>
-                <div class="slide-item-title">${typeHTML}${slideTitle}</div>
+            drawerItem.innerHTML = `
+                <div class="drawer-item-number">${index + 1}</div>
+                <div class="drawer-item-title">${typeHTML}${slideTitle}</div>
             `;
             
-            slideItem.addEventListener('click', () => {
+            drawerItem.addEventListener('click', () => {
                 goToSlide(index);
-                toggleSlideSelector();
+                toggleDrawer(false);
             });
             
-            slideSelectorList.appendChild(slideItem);
+            drawerContent.appendChild(drawerItem);
         });
     }
 
-    // Toggle slide selector dropdown
-    function toggleSlideSelector() {
-        if (isSlideSelectorOpen) {
-            slideSelectorDropdown.classList.remove('active');
-            isSlideSelectorOpen = false;
+    // Toggle drawer navigation
+    function toggleDrawer(forceState = null) {
+        if (forceState !== null) {
+            isDrawerOpen = forceState;
         } else {
-            populateSlideSelector();
-            slideSelectorDropdown.classList.add('active');
-            slideSearch.focus();
-            isSlideSelectorOpen = true;
+            isDrawerOpen = !isDrawerOpen;
+        }
+        
+        if (isDrawerOpen) {
+            slideDrawer.classList.add('active');
+            drawerOverlay.classList.add('active');
+            drawerSearch.focus();
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        } else {
+            slideDrawer.classList.remove('active');
+            drawerOverlay.classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
         }
         resetIdleTimer();
     }
@@ -397,6 +424,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function createCoverPage(slide) {
         return `
             <div class="cover-page">
+                <div class="cover-icon">
+                    <i class="fas fa-globe-americas"></i>
+                </div>
                 <h1>${slide.title}</h1>
                 <h2>${slide.subtitle}</h2>
                 <div class="cover-decoration"></div>
@@ -406,6 +436,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="map-pin pin3"></div>
                 <div class="map-circle circle1"></div>
                 <div class="map-circle circle2"></div>
+                <div class="map-compass"></div>
             </div>
         `;
     }
@@ -438,6 +469,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 <h2>${slide.subtitle}</h2>
                 <div class="thanks-decoration">
                     <i class="fas fa-hands-clapping"></i>
+                </div>
+                <div class="thanks-circles">
+                    <div class="thanks-circle"></div>
+                    <div class="thanks-circle"></div>
+                    <div class="thanks-circle"></div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Create definition page content
+    function createDefinitionPage(slide) {
+        const benefitsHTML = slide.benefits.map(benefit => 
+            `<li>${benefit}</li>`
+        ).join('');
+
+        return `
+            <div class="definition-page">
+                <h2>${slide.title}</h2>
+                <p class="definition-description">${slide.description}</p>
+                <div class="benefits-container">
+                    <h3>Benefits of GIS Buffering</h3>
+                    <ul class="benefits-list">
+                        ${benefitsHTML}
+                    </ul>
+                </div>
+                <div class="definition-decoration">
+                    <div class="buffer-animation"></div>
+                    <div class="map-pin pin1"></div>
+                    <div class="map-pin pin2"></div>
                 </div>
             </div>
         `;
@@ -508,10 +569,15 @@ document.addEventListener('DOMContentLoaded', function() {
             imageContainer.innerHTML = createThanksPage(slide);
             imageContainer.classList.add('special-slide', 'thanks-slide');
             slideDescription.style.display = 'none'; // Hide description for thanks page
+        } else if (slide.type === 'definition') {
+            // Definition page
+            imageContainer.innerHTML = createDefinitionPage(slide);
+            imageContainer.classList.add('special-slide', 'definition-slide');
+            slideDescription.style.display = 'none'; // Hide description for definition page
         } else {
             // Regular image slide
             imageContainer.innerHTML = `<img id="slide-image" src="${slide.image}" alt="Slide ${currentSlide + 1}" tabindex="0">`;
-            imageContainer.classList.remove('special-slide', 'cover-slide', 'team-slide', 'thanks-slide');
+            imageContainer.classList.remove('special-slide', 'cover-slide', 'team-slide', 'thanks-slide', 'definition-slide');
             slideDescription.style.display = 'block'; // Show description for regular slides
             // Reset focus for accessibility
             setTimeout(() => {
@@ -528,6 +594,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Manage navigation button states
         updateNavigationState();
+        
+        // Update the drawer content with the current slide highlighted
+        updateDrawerActiveState();
         
         // Add slide direction class for animation
         if (direction) {
@@ -560,6 +629,24 @@ document.addEventListener('DOMContentLoaded', function() {
         nextNav.style.visibility = isLast ? 'hidden' : 'visible';
     }
 
+    // Update drawer active state
+    function updateDrawerActiveState() {
+        // Update active state in drawer list
+        const drawerItems = drawerContent.querySelectorAll('.drawer-item');
+        drawerItems.forEach((item, index) => {
+            if (index === currentSlide) {
+                item.classList.add('active');
+                
+                // Scroll into view if drawer is open
+                if (isDrawerOpen) {
+                    item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            } else {
+                item.classList.remove('active');
+            }
+        });
+    }
+
     // Go to previous slide
     function goToPrevSlide() {
         if (currentSlide > 0 && !isAnimating) {
@@ -582,81 +669,107 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('.slide-controls').classList.remove('hidden');
         
         idleTimer = setTimeout(() => {
-            if (!isAnimating && !isSlideSelectorOpen) {
+            if (!isAnimating && !isDrawerOpen) {
                 document.querySelector('.slide-controls').classList.add('hidden');
             }
         }, 3000);
     }
 
-    // Event listeners
-    prevBtn.addEventListener('click', goToPrevSlide);
-    nextBtn.addEventListener('click', goToNextSlide);
-    prevNav.addEventListener('click', goToPrevSlide);
-    nextNav.addEventListener('click', goToNextSlide);
-    slideSelectorBtn.addEventListener('click', toggleSlideSelector);
-
-    // Search functionality for slide selector
-    slideSearch.addEventListener('input', function() {
-        populateSlideSelector(this.value);
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-        if (isSlideSelectorOpen && 
-            !slideSelectorDropdown.contains(e.target) && 
-            e.target !== slideSelectorBtn) {
-            toggleSlideSelector();
-        }
-    });
-
-    // Double click on image for fullscreen
-    imageContainer.addEventListener('dblclick', toggleFullscreen);
+    // Initialize the presentation
+    function initPresentation() {
+        // Preload images
+        preloadImages();
+        
+        // Initialize the first slide
+        updateProgressBar();
+        updateSlide();
+        
+        // Populate the drawer with slides
+        populateDrawerContent();
+        
+        // Set up proper event listeners
+        setupEventListeners();
+    }
     
-    // Fullscreen button
-    fullscreenBtn.addEventListener('click', toggleFullscreen);
-
-    // Handle fullscreen change events
-    document.addEventListener('fullscreenchange', function() {
-        isFullscreen = !!document.fullscreenElement;
-        if (!isFullscreen) {
-            fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
-            fullscreenBtn.setAttribute('aria-label', 'Enter fullscreen');
-        }
-        resetIdleTimer();
-    });
-
-    // Keyboard navigation
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'ArrowLeft') {
-            goToPrevSlide();
-        } else if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
-            goToNextSlide();
-        } else if (e.key.toLowerCase() === 'f') {
-            toggleFullscreen();
-        } else if (e.key.toLowerCase() === 'p') {
-            togglePresentationMode();
-        } else if (e.key.toLowerCase() === 'l') {
-            toggleSlideSelector();
-        } else if (e.key === 'Escape' && isSlideSelectorOpen) {
-            toggleSlideSelector();
-        }
-        resetIdleTimer();
-    });
-
-    // Touch support for mobile
-    let touchStartX = 0;
-    let touchEndX = 0;
+    // Set up event listeners
+    function setupEventListeners() {
+        // Event listeners for navigation
+        prevBtn.addEventListener('click', goToPrevSlide);
+        nextBtn.addEventListener('click', goToNextSlide);
+        prevNav.addEventListener('click', goToPrevSlide);
+        nextNav.addEventListener('click', goToNextSlide);
+        
+        // Drawer navigation events
+        drawerToggle.addEventListener('click', () => toggleDrawer());
+        drawerClose.addEventListener('click', () => toggleDrawer(false));
+        drawerOverlay.addEventListener('click', () => toggleDrawer(false));
+        
+        // Search functionality for drawer
+        drawerSearch.addEventListener('input', function() {
+            populateDrawerContent(this.value);
+        });
+        
+        // Close drawer with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && isDrawerOpen) {
+                toggleDrawer(false);
+            }
+        });
+        
+        // Double click on image for fullscreen
+        imageContainer.addEventListener('dblclick', toggleFullscreen);
+        
+        // Fullscreen button
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
+        
+        // Handle fullscreen change events
+        document.addEventListener('fullscreenchange', function() {
+            isFullscreen = !!document.fullscreenElement;
+            if (!isFullscreen) {
+                fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+                fullscreenBtn.setAttribute('aria-label', 'Enter fullscreen');
+            }
+            resetIdleTimer();
+        });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                goToPrevSlide();
+            } else if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+                goToNextSlide();
+            } else if (e.key.toLowerCase() === 'f') {
+                toggleFullscreen();
+            } else if (e.key.toLowerCase() === 'p') {
+                togglePresentationMode();
+            } else if (e.key.toLowerCase() === 'm') {
+                toggleDrawer();
+            }
+            resetIdleTimer();
+        });
+        
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+            resetIdleTimer();
+        }, false);
+        
+        document.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, false);
+        
+        // Events that reset the idle timer
+        document.addEventListener('mousemove', resetIdleTimer);
+        document.addEventListener('keypress', resetIdleTimer);
+        document.addEventListener('click', resetIdleTimer);
+        document.addEventListener('touchstart', resetIdleTimer);
+    }
     
-    document.addEventListener('touchstart', function(e) {
-        touchStartX = e.changedTouches[0].screenX;
-        resetIdleTimer();
-    }, false);
-    
-    document.addEventListener('touchend', function(e) {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-    }, false);
-    
+    // Handle touch swipe
     function handleSwipe() {
         const threshold = 50;
         if (touchEndX < touchStartX - threshold) {
@@ -667,19 +780,9 @@ document.addEventListener('DOMContentLoaded', function() {
             goToPrevSlide();
         }
     }
-
-    // Preload images
-    preloadImages();
     
-    // Initialize the first slide
-    updateProgressBar();
-    updateSlide();
-    
-    // Events that reset the idle timer
-    document.addEventListener('mousemove', resetIdleTimer);
-    document.addEventListener('keypress', resetIdleTimer);
-    document.addEventListener('click', resetIdleTimer);
-    document.addEventListener('touchstart', resetIdleTimer);
+    // Initialize the presentation
+    initPresentation();
     
     // Start the idle timer
     resetIdleTimer();
