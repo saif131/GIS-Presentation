@@ -6,8 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const nextNav = document.getElementById('next-nav');
     const slideImage = document.getElementById('slide-image');
     const slideDescription = document.getElementById('slide-description');
-    const currentSlideEl = document.getElementById('current-slide');
-    const totalSlidesEl = document.getElementById('total-slides');
     const progressBar = document.getElementById('progress-bar');
     const slideContent = document.getElementById('slide-content');
     const presentationContainer = document.querySelector('.presentation-container');
@@ -235,9 +233,6 @@ document.addEventListener('DOMContentLoaded', function() {
             description: ''
         }
     ];
-
-    // Set total slides count
-    totalSlidesEl.textContent = slides.length;
 
     // Current slide index
     let currentSlide = 0;
@@ -467,13 +462,44 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="thanks-page">
                 <h1>${slide.title}</h1>
                 <h2>${slide.subtitle}</h2>
-                <div class="thanks-decoration">
-                    <i class="fas fa-hands-clapping"></i>
+                
+                <div class="thanks-content">
+                    <div class="thanks-icon-row">
+                        <div class="thanks-icon">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <div class="thanks-icon">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <div class="thanks-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="thanks-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="thanks-decoration">
+                        <i class="fas fa-hands-clapping"></i>
+                        <div class="pulse-ring"></div>
+                    </div>
                 </div>
-                <div class="thanks-circles">
-                    <div class="thanks-circle"></div>
-                    <div class="thanks-circle"></div>
-                    <div class="thanks-circle"></div>
+                
+                <div class="glow-effect">
+                    <div class="glow-point"></div>
+                    <div class="glow-point"></div>
+                    <div class="glow-point"></div>
+                </div>
+                
+                <div class="particle-container">
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
                 </div>
             </div>
         `;
@@ -587,7 +613,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         slideDescription.innerHTML = `<p>${slide.description}</p>`;
-        currentSlideEl.textContent = currentSlide + 1;
         
         // Update progress bar
         updateProgressBar();
