@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIS and Buffering Presentation</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="slide-bg"></div>
+        
+        <div class="presentation-title">
+            <i class="fas fa-map-location-dot"></i> GIS and Buffering
+        </div>
+        
+        <button id="fullscreen-btn" class="control-btn fullscreen-btn" aria-label="Toggle fullscreen">
+            <i class="fas fa-expand"></i>
+        </button>
+        
+        <button class="control-btn help-btn" aria-label="Show keyboard shortcuts">
+            <i class="fas fa-question"></i>
+        </button>
+        
+        <div class="slide-selector-container">
+            <button id="slide-selector-btn" class="control-btn slide-selector-btn" aria-label="Select slide">
+                <i class="fas fa-list"></i>
+            </button>
+            <div class="slide-selector-dropdown">
+                <div class="slide-selector-search">
+                    <input type="text" id="slide-search" placeholder="Search slides...">
+                </div>
+                <div class="slide-selector-list" id="slide-selector-list">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="tooltip">
+            <h4>Keyboard Shortcuts</h4>
+            <ul>
+                <li><strong>Left Arrow:</strong> Previous slide</li>
+                <li><strong>Right Arrow:</strong> Next slide</li>
+                <li><strong>Space/Enter:</strong> Next slide</li>
+                <li><strong>F:</strong> Toggle fullscreen</li>
+                <li><strong>P:</strong> Toggle presentation mode</li>
+                <li><strong>Esc:</strong> Exit fullscreen/presentation mode</li>
+                <li><strong>L:</strong> Open slide selector</li>
+            </ul>
+        </div>
+        
+        <div class="progress-container">
+            <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+        </div>
+        
+        <div class="side-nav side-nav-left" id="prev-nav">
+            <div class="side-nav-icon">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+        </div>
+        
+        <div class="side-nav side-nav-right" id="next-nav">
+            <div class="side-nav-icon">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+        
+        <div class="slide-container">
+            <div id="slide-content" class="slide-content">
+                <div class="image-container">
+                    <img id="slide-image" src="New folder/Screenshot (443).png" alt="Presentation slide" tabindex="0">
+                </div>
+                <div id="slide-description" class="slide-description">
+                    <p>Click the arrows or swipe to navigate through the presentation slides.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide-controls">
+            <button id="prev-btn" class="nav-btn" aria-label="Previous slide">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="slide-counter">
+                <span id="current-slide">1</span> / <span id="total-slides">42</span>
+            </div>
+            <button id="next-btn" class="nav-btn" aria-label="Next slide">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+        
+        <div class="loader"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
