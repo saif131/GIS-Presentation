@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Elements
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
     const prevNav = document.getElementById('prev-nav');
     const nextNav = document.getElementById('next-nav');
     const slideImage = document.getElementById('slide-image');
@@ -643,13 +641,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const isFirst = currentSlide === 0;
         const isLast = currentSlide === slides.length - 1;
         
-        prevBtn.disabled = isFirst;
-        nextBtn.disabled = isLast;
-        
-        prevBtn.style.opacity = isFirst ? '0.5' : '1';
-        nextBtn.style.opacity = isLast ? '0.5' : '1';
-        
-        // Update side navigation visibility
         prevNav.style.visibility = isFirst ? 'hidden' : 'visible';
         nextNav.style.visibility = isLast ? 'hidden' : 'visible';
     }
@@ -691,11 +682,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Reset the idle timer
     function resetIdleTimer() {
         clearTimeout(idleTimer);
-        document.querySelector('.slide-controls').classList.remove('hidden');
         
         idleTimer = setTimeout(() => {
             if (!isAnimating && !isDrawerOpen) {
-                document.querySelector('.slide-controls').classList.add('hidden');
+                // Controls are now hidden completely, so no need to toggle visibility
             }
         }, 3000);
     }
@@ -719,8 +709,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set up event listeners
     function setupEventListeners() {
         // Event listeners for navigation
-        prevBtn.addEventListener('click', goToPrevSlide);
-        nextBtn.addEventListener('click', goToNextSlide);
         prevNav.addEventListener('click', goToPrevSlide);
         nextNav.addEventListener('click', goToNextSlide);
         
