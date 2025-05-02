@@ -22,10 +22,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Slide data with image paths and descriptions
     const slides = [
         {
-            type: 'cover',
-            title: 'GIS and Buffering',
-            subtitle: 'Geographic Information Systems Analysis',
-            description: ''
+            title: "GIS and Buffering",
+            subtitle: "Geographic Information Systems Analysis",
+            type: "cover",
+            id: "cover-slide"
         },
         {
             type: 'team',
@@ -40,17 +40,10 @@ document.addEventListener('DOMContentLoaded', function() {
             description: ''
         },
         {
-            type: 'definition',
-            title: 'GIS Buffering',
-            description: 'A spatial analysis technique that creates a zone of a specified distance around features',
-            benefits: [
-                'Identifies areas of potential impact or influence',
-                'Enables proximity analysis for decision making',
-                'Supports emergency response planning',
-                'Visualizes service coverage areas',
-                'Facilitates environmental impact assessment',
-                'Allows for multi-layer spatial queries'
-            ]
+            title: "GIS Buffering",
+            description: "Buffering in GIS creates a zone of specified distance around selected features, allowing for proximity analysis and identification of areas within a certain range of geographic objects.",
+            type: "definition",
+            id: "definition-slide"
         },
         {
             image: 'New folder/Screenshot (443).png',
@@ -505,18 +498,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Create definition page content
     function createDefinitionPage(slide) {
-        const benefitsHTML = slide.benefits.map(benefit => 
-            `<li>${benefit}</li>`
-        ).join('');
-
         return `
             <div class="definition-page">
                 <h2>${slide.title}</h2>
                 <p class="definition-description">${slide.description}</p>
                 <div class="benefits-container">
-                    <h3>Benefits of GIS Buffering</h3>
+                    <h3>Key Benefits</h3>
                     <ul class="benefits-list">
-                        ${benefitsHTML}
+                        <li>Identifies areas within specified distances from features</li>
+                        <li>Enables proximity and accessibility analysis</li>
+                        <li>Helps in planning and decision-making processes</li>
+                        <li>Supports environmental impact assessments</li>
                     </ul>
                 </div>
                 <div class="definition-decoration">
